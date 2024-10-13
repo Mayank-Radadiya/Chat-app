@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "../../styles/auth.css";
 import { useRouter } from "next/navigation";
 import { Context } from "@/context";
@@ -8,28 +8,40 @@ import axios from "axios";
 
 export default function Auth() {
   const { username, setUsername, secret, setSecret } = useContext(Context);
+  const router = useRouter();
+  const [error, setError] = useState("");
 
-  const Router = useRouter();
 
   function onSubmit(e) {
     e.preventDefault();
 
-    if (!username || !secret) return;
+    // Basic validation
+    if (!username || !secret) {
+      setError("Please fill in both fields.");
+      return;
+    }
+    // Clear error message if validation passes
+    setError("");
 
     axios
       .put(
         "https://api.chatengine.io/users/",
         { username, secret },
-        { headers: { "private-key": "90561c93-a7f1-4b77-a4bf-ab52fdf6fb53" } }
+        { headers: { "Private-Key": "ce9c63d5-2b15-41bd-b003-d4889d8e8b07" } }
       )
-      .then((res) => Router.push("/chat"))
-      .catch((err) => console.error("Error on submit ", err));
+      .then((res) => router.push("/chat"))
+      .catch((err) => {
+        console.error("Error on submit ", err);
+        setError("Failed to login. Please check your credentials.");
+      });
   }
+
   return (
     <div className="background">
       <div className="auth-container">
-        <form className="auth-form " onSubmit={(e) => onSubmit}>
+        <form className="auth-form" onSubmit={onSubmit}>
           <div className="auth-title">Chat App</div>
+          {error && <div className="error-message">{error}</div>}
           <div className="input-container">
             <input
               className="text-input"
