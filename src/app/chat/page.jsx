@@ -5,42 +5,36 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import "@/styles/chats.css";
 import "@/styles/auth.css";
-
-const ChatEngine = dynamic(
-  () => import("react-chat-engine").then((module) => module.ChatEngine),
-  { ssr: false }
-);
-
-const MessageFromSocial = dynamic(
-  () => import("react-chat-engine").then((module) => module.MessageFromSocial),
-  { ssr: false }
-);
+import { ChatEngine ,MessageFormSocial } from "react-chat-engine";
 
 
-export default function Chats() {
-  const { username, secret } = useContext(Context);
-  const router = useRouter();
-  const [showChat, setShowChat] = useState(false);
+function TestChatEngine() {
+   const { username, secret } = useContext(Context);
+   const router = useRouter();
+   const [showChat, setShowChat] = useState(false);
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        setShowChat(true);
+      }
+    }, []);
 
-  useEffect(() => {
-    if (typeof document !== null) {
-      setShowChat(true);
-    }
-  }, []);
-
-  if (!showChat) return <div>Loading...</div>;
-
+    // Redirect to / if username or secret is missing
+    useEffect(() => {
+      if (!username || !secret) {
+        router.push("/auth");
+      }
+    }, [username, secret, router]);
   return (
     <div className="background">
-      <div className="shadow">
-        <ChatEngine
-          height="calc(100vh - 200px)"
-          projectID="e42e0a66-77f1-45f4-abf4-3f1a6cb0873e"
-          userName={username}
-          userSecret={secret}
-          renderNewMessageForm={() => {<MessageFromSocial />} }
-        />
-      </div>
-    </div>
-  );
+       <div className="shadow"></div>
+      <ChatEngine
+      height="calc(100vh - 200px)"
+      projectID="2f131094-a299-42ab-af4b-867da94399f5"
+      userName={username}
+      userSecret={secret}
+      renderNewMessageForm={() => <MessageFormSocial />}  />
+     </div>
+  )
 }
+
+export default TestChatEngine;

@@ -1,12 +1,17 @@
-import "../styles/auth.css";
-import "../styles/chats.css";
-import "../styles/index.css";
-import { ContextProvider } from "../context";
+// app/page.js
 
-export default function App({ Component, pageProps }) {
-  return (
-    <ContextProvider>
-      <Component {...pageProps} />
-    </ContextProvider>
-  );
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function HomePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to /auth on page load
+    router.push("/auth");
+  }, [router]);
+
+  return null; // Optional: You can return null or a loading indicator
 }

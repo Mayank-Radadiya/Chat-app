@@ -11,7 +11,6 @@ export default function Auth() {
   const router = useRouter();
   const [error, setError] = useState("");
 
-
   function onSubmit(e) {
     e.preventDefault();
 
@@ -27,7 +26,7 @@ export default function Auth() {
       .put(
         "https://api.chatengine.io/users/",
         { username, secret },
-        { headers: { "Private-Key": "ce9c63d5-2b15-41bd-b003-d4889d8e8b07" } }
+        { headers: { "Private-Key": "2e5f13cf-f3a2-4432-8eef-951d10b15f64" } }
       )
       .then((res) => router.push("/chat"))
       .catch((err) => {
